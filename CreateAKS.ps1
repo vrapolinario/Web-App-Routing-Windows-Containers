@@ -54,3 +54,7 @@ az aks get-credentials -g $RGName -n $AKSClusterName
 $NamespaceName = Read-Host -Prompt 'Please provide the name for the samespace on which the app will be deployed'
 kubectl create namespace $NamespaceName
 
+#Deppoy the application and Ingress
+kubectl apply -f deployment.yaml -n $NamespaceName
+kubectl apply -f service.yaml -n $NamespaceName
+kubectl apply -f ingress.yaml -n $NamespaceName

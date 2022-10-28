@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iis-helloworld  
+  name: iis-app-routing  
 spec:
   replicas: 6
   selector:
     matchLabels:
-      app: iis-helloworld
+      app: iis-app-routing
   template:
     metadata:
       labels:
-        app: iis-helloworld
+        app: iis-app-routing
     spec:
       nodeSelector:
         "kubernetes.io/os": windows
       containers:
-      - name: iis-helloworld
+      - name: iis-app-routing
         image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
         resources:
           limits:
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: iis-helloworld
+  name: iis-app-routing
 spec:
   type: ClusterIP
   ports:
   - port: 80
   selector:
-    app: iis-helloworld
+    app: iis-app-routing

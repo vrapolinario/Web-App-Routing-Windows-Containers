@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://kvignitedemo.vault.azure.net/certificates/WebAppCert/29f05d348c734cb289bd82c1ae379436
+  name: iis-helloworld
+  namespace: hello-web-app-routing
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+  - host: webapp.ignitedemo.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: iis-helloworld
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - webapp.ignitedemo.com
+    secretName: keyvault-aks-helloworld

@@ -4,11 +4,12 @@ This repo is a companion for the #1 blog post on a blog series - 5 Tips for cont
 
 ## How to use
 
-To get stareted, run the CreateAKSWebAppRouting.ps1 script. You can run it from:
+To get started, run the CreateAKSWebAppRouting.ps1 script. You can run it from:
+
 - Azure Cloud Shell.
   - In this case, you can run the script as-is.
 - You can also run it from any PowerShell session. In this case, you'll need to change:
-  -	Uncomment the line #5 to properly log in to Azure from PowerShell.
+  - Uncomment the line #5 to properly log in to Azure from PowerShell.
   - Install OpenSSL on your machine to generate the SSL Certificate to be used.
 
 For questions, comments, and feedback, feel free to reach out to me:

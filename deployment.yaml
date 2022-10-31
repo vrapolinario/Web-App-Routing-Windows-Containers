@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iis-app-routing  
+  name: iis-app-routing
 spec:
-  replicas: 6
+  replicas: 1
   selector:
     matchLabels:
       app: iis-app-routing

@@ -2,7 +2,7 @@
 
 #Log into the Azure subscription
 $Az_Sub = Read-Host -Prompt 'Please provide the Azure subscription ID to be used'
-az login --use-device-code
+#az login --use-device-code
 az account set --subscription $Az_Sub
 
 # Install the aks-preview extension
@@ -39,15 +39,18 @@ $AKSNodepoolName = Read-Host -Prompt 'Please provide the name for the nodepool (
 az aks nodepool add -g $RGName --cluster-name $AKSClusterName --os-type Windows --name $AKSNodepoolName --node-count 1
 
 #Retrieve user managed identity object ID for the add-on
+Write-Host 'Gathering AKS Managed Identity to be used for AKV access'
 $ManagedIdentityName = "webapprouting-$AKSClusterName"
 $MCRGName = az aks show -g $RGName -n $AKSClusterName --query nodeResourceGroup -o tsv
 $UserManagedIdentity_ResourceID = "/subscriptions/$Az_Sub/resourceGroups/$MCRGName/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$ManagedIdentityName"
 $ManagedIdentity_ObjectID = az resource show --id $UserManagedIdentity_ResourceID --query "properties.principalId" -o tsv | tr -d '[:space:]'
 
 #Grant the add-on permissions to retrieve certificates from Azure Key Vault
+Write-Host 'Granting the add-on permission to retrieve the certificate'
 az keyvault set-policy --name $AKVName --object-id $ManagedIdentity_ObjectID --secret-permissions get --certificate-permissions get
 
 #Connect to your AKS cluster
+Write-Host "Now, let's connect to your AKS cluster. We'll retrieve the credentials from Azure"
 az aks get-credentials -g $RGName -n $AKSClusterName
 
 #Create a namespace for the application on your AKS cluster
@@ -55,6 +58,12 @@ $NamespaceName = Read-Host -Prompt 'Please provide the name for the samespace on
 kubectl create namespace $NamespaceName
 
 #Deppoy the application and Ingress
-kubectl apply -f deployment.yaml -n $NamespaceName
-kubectl apply -f service.yaml -n $NamespaceName
-kubectl apply -f ingress.yaml -n $NamespaceName
+Write-Host "The next steps should only be performed after you edited the YAML files from the repo."
+Write-Host "You will need to update the "
+Write-Host "DO NOT CONTINUE BEFORE DOWNLOADING THE YAML FILES AND EDITING IT"
+$Edit = Read-Host -Prompt "Did you download the files and edit it? Type YES to continue"
+if ($Edit.Equals('YES')) {
+    kubectl apply -f deployment.yaml -n $NamespaceName
+    kubectl apply -f ingress.yaml -n $NamespaceName
+}
+

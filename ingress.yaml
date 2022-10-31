@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:
-  - host: webapp.ignitedemo.com
+  - host: <HostName>
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - webapp.ignitedemo.com
-    secretName: keyvault-aks-helloworld
+    - <HostName>
+    secretName: keyvault-iis-app-routing

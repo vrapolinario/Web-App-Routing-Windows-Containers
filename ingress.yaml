@@ -4,7 +4,7 @@ metadata:
   annotations:
     kubernetes.azure.com/tls-cert-keyvault-uri: <KeyVaultCertificateUri>
   name: iis-app-routing
-  namespace: iis-app-routing
+  namespace: <namespace>
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:

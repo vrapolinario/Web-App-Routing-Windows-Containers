@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 #This script will create a new AKS cluster and deploy 
 
 #Log into the Azure subscription

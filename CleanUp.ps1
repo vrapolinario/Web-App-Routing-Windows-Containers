@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 #Clean up your environment after you validated Web Application Routing with Windows containers
 $RG_Name = Read-Host -Prompt "Please provide the Resource Group Name you want to delete"
 Remove-AzResourceGroup -Name $RG_Name -Force | Out-Null

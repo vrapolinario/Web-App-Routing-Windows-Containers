@@ -1,6 +1,9 @@
 #!/usr/bin/env pwsh
 
-#This script will create a new AKS cluster and deploy 
+#This script will create a new AKS cluster and deploy the Web Application Routing add-on.
+#It will also create all the other components for the add-on to run, such as Azure Key Vault and more.
+#Finally, it will deploy a sample application (IIS) on Windows Containers with HTTPS traffic enabled.
+#Before finishing, the script will give you the output of the ingress so you can get its IP and hostname.
 
 #Log into the Azure subscription
 $Az_Sub = Read-Host -Prompt 'Please provide the Azure subscription ID to be used'

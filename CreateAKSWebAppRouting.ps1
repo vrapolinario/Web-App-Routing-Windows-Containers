@@ -43,7 +43,7 @@ $AKSClusterName = Read-Host -Prompt 'Please provide the name for the Azure Kuber
 $WinUsername = Read-Host -Prompt 'Please create a username for the administrator credentials on your Windows Server nodes'
 $WinPassword = Read-Host -Prompt 'Please create a password for the administrator credentials on your Windows Server nodes' -AsSecureString
 Write-Host "Creating AKS cluster"
-az aks create -g $RGName -n $AKSClusterName -l $RGLocation --node-count 2 --enable-addons azure-keyvault-secrets-provider,web_application_routing,monitoring --generate-ssh-keys --enable-secret-rotation --network-plugin azure --vm-set-type VirtualMachineScaleSets --windows-admin-username $WinUsername --windows-admin-password $WinPassword` | Out-Null
+az aks create -g $RGName -n $AKSClusterName -l $RGLocation --node-count 2 --enable-addons azure-keyvault-secrets-provider,web_application_routing,monitoring --generate-ssh-keys --enable-secret-rotation --network-plugin azure --vm-set-type VirtualMachineScaleSets --windows-admin-username $WinUsername --windows-admin-password $WinPassword | Out-Null
 $AKSNodepoolName = Read-Host -Prompt 'Please provide the name for the nodepool (max 6 characters)'
 Write-Host "Creating Windows Node Pool"
 az aks nodepool add -g $RGName --cluster-name $AKSClusterName --os-type Windows --name $AKSNodepoolName --node-count 1 | Out-Null

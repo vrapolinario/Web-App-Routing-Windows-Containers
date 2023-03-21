@@ -43,17 +43,17 @@ $AKSClusterName = Read-Host -Prompt 'Please provide the name for the Azure Kuber
 $WinUsername = Read-Host -Prompt 'Please create a username for the administrator credentials on your Windows Server nodes'
 $WinPassword = Read-Host -Prompt 'Please create a password for the administrator credentials on your Windows Server nodes' -AsSecureString
 Write-Host "Creating AKS cluster"
-az aks create -g $RGName -n $AKSClusterName -l $RGLocation --node-count 1 --enable-addons azure-keyvault-secrets-provider,web_application_routing,monitoring --generate-ssh-keys --enable-secret-rotation --network-plugin azure --vm-set-type VirtualMachineScaleSets --windows-admin-username $WinUsername --windows-admin-password $WinPassword | Out-Null
+az aks create -g $RGName -n $AKSClusterName -l $RGLocation --node-count 2 --enable-addons azure-keyvault-secrets-provider,web_application_routing,monitoring --generate-ssh-keys --enable-secret-rotation --network-plugin azure --vm-set-type VirtualMachineScaleSets --windows-admin-username $WinUsername --windows-admin-password $WinPassword | Out-Null
 $AKSNodepoolName = Read-Host -Prompt 'Please provide the name for the nodepool (max 6 characters)'
 Write-Host "Creating Windows Node Pool"
-az aks nodepool add -g $RGName --cluster-name $AKSClusterName --os-type Windows --name $AKSNodepoolName --node-count 1 | Out-Null
+az aks nodepool add -g $RGName --cluster-name $AKSClusterName --os-type Windows --name $AKSNodepoolName --node-count 2 | Out-Null
 
 #Retrieve user managed identity object ID for the add-on
 Write-Host 'Gathering AKS Managed Identity to be used for AKV access'
-$ManagedIdentityName = "webapprouting-$AKSClusterName" | Out-Null
-$MCRGName = az aks show -g $RGName -n $AKSClusterName --query nodeResourceGroup -o tsv | Out-Null
-$UserManagedIdentity_ResourceID = "/subscriptions/$Az_Sub/resourceGroups/$MCRGName/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$ManagedIdentityName" | Out-Null
-$ManagedIdentity_ObjectID = az resource show --id $UserManagedIdentity_ResourceID --query "properties.principalId" -o tsv | tr -d '[:space:]' | Out-Null
+$ManagedIdentityName = "webapprouting-$AKSClusterName"
+$MCRGName = az aks show -g $RGName -n $AKSClusterName --query nodeResourceGroup -o tsv
+$UserManagedIdentity_ResourceID = "/subscriptions/$Az_Sub/resourceGroups/$MCRGName/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$ManagedIdentityName"
+$ManagedIdentity_ObjectID = az resource show --id $UserManagedIdentity_ResourceID --query "properties.principalId" -o tsv | tr -d '[:space:]'
 
 #Grant the add-on permissions to retrieve certificates from Azure Key Vault
 Write-Host 'Granting the add-on permission to retrieve the certificate'

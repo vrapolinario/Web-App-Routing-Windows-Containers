@@ -71,8 +71,8 @@ kubectl create namespace $NamespaceName | Out-Null
 Write-Host "The next steps should only be performed after you edited the YAML files from the repo."
 Write-Host "You will need to update the ingress.yaml file with <HostName>, <KeyVaultCertificateUri>, and NameSpace."
 Write-Host "Based on the deployment so far, this is the information you need:"
-Write-Host "The hostname is:$Hostname"
-$KeyVaultCertificateURI = az keyvault certificate show --vault-name $AKVName -n $AKVCertName --query "id" --output tsv  | Out-Null
+Write-Host "The hostname is: $Hostname"
+$KeyVaultCertificateURI = az keyvault certificate show --vault-name $AKVName -n $AKVCertName --query "id" --output tsv
 Write-Host "The Key Vault Certificate URI is: $KeyVaultCertificateURI"
 Write-Host "The namespace is: $NamespaceName"
 Write-Host "DO NOT CONTINUE BEFORE DOWNLOADING THE YAML FILES AND EDITING IT"
@@ -80,8 +80,10 @@ $Edit = Read-Host -Prompt "Did you download the files and edit it? Type YES to c
 if ($Edit.Equals('YES')) {
     kubectl apply -f deployment.yaml -n $NamespaceName
     kubectl apply -f ingress.yaml -n $NamespaceName
+    Write-Host 'Your deployment finalized with success. Here is the information on the Ingress:'
+    $IngressInfo = kubectl get ingress -n $NamespaceName
+    Write-Host "Ingress output: $IngressInfo"
+else {
+    Write-Host "Thank you for using this scrit. Please check the Resource Group and assets if you wish to continue."
 }
-#Final output
-Write-Host 'Your deployment finalized with success. Here is the information on the Ingress:'
-$IngressInfo = kubectl get ingress -n $NamespaceName
-Write-Host "Ingress output: $IngressInfo"
+}
